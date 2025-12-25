@@ -17,19 +17,19 @@ const Home = () => {
     const fetch = async () => {
       try {
         const c = await getClasses();
-        setClasses(c.data || []);
+        setClasses(Array.isArray(c.data) ? c.data : []);
       } catch (e) {
         console.error('Failed to load classes:', e);
       }
       try {
         const ex = await getEntranceExams();
-        setExams(ex.data || []);
+        setExams(Array.isArray(ex.data) ? ex.data : []);
       } catch (e) {
         console.error('Failed to load exams:', e);
       }
       try {
         const notesRes = await getNotes();
-        const notes = notesRes.data || [];
+        const notes = Array.isArray(notesRes.data) ? notesRes.data : [];
         const found = notes.some(n => {
           const name = n.documentTypeId ? (n.documentTypeId.name || '') : '';
           return name.toLowerCase().includes('past');

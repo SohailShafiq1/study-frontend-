@@ -15,7 +15,8 @@ const ClassPage = () => {
     const fetchSubjects = async () => {
       try {
         const response = await getSubjects();
-        const filteredSubjects = response.data.filter(subject => subject.classId._id === classId || subject.classId === classId);
+        const dataArray = Array.isArray(response.data) ? response.data : [];
+        const filteredSubjects = dataArray.filter(subject => subject.classId._id === classId || subject.classId === classId);
         setSubjects(filteredSubjects);
       } catch (error) {
         console.error('Error fetching subjects:', error);

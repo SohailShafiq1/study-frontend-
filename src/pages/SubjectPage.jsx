@@ -21,7 +21,8 @@ const SubjectPage = () => {
       try {
         // Fetch chapters
         const chaptersResponse = await getChapters();
-        const filteredChapters = chaptersResponse.data.filter((chapter) => {
+        const chaptersArray = Array.isArray(chaptersResponse.data) ? chaptersResponse.data : [];
+        const filteredChapters = chaptersArray.filter((chapter) => {
           const sid = chapter.subjectId ? (chapter.subjectId._id || chapter.subjectId) : null;
           return sid === subjectId;
         });
@@ -29,7 +30,8 @@ const SubjectPage = () => {
 
         // Fetch notes
         const notesResponse = await getNotes();
-        const filteredNotes = notesResponse.data.filter((note) => {
+        const notesArray = Array.isArray(notesResponse.data) ? notesResponse.data : [];
+        const filteredNotes = notesArray.filter((note) => {
           const nid = note.subjectId ? (note.subjectId._id || note.subjectId) : null;
           return nid === subjectId;
         });

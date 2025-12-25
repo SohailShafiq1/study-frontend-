@@ -55,7 +55,7 @@ const Admin = () => {
   const fetchClasses = async () => {
     try {
       const response = await getClasses();
-      setClasses(response.data || []);
+      setClasses(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching classes:', error);
     }
@@ -64,7 +64,7 @@ const Admin = () => {
   const fetchSubjects = async () => {
     try {
       const response = await getSubjects();
-      setSubjects(response.data || []);
+      setSubjects(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching subjects:', error);
     }
@@ -73,7 +73,7 @@ const Admin = () => {
   const fetchChapters = async () => {
     try {
       const response = await getChapters();
-      setChapters(response.data || []);
+      setChapters(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching chapters:', error);
     }
@@ -82,7 +82,7 @@ const Admin = () => {
   const fetchNotes = async () => {
     try {
       const response = await getNotes();
-      setNotes(response.data || []);
+      setNotes(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching notes:', error);
     }
@@ -91,7 +91,7 @@ const Admin = () => {
   const fetchEntranceExams = async () => {
     try {
       const response = await getEntranceExams();
-      setEntranceExams(response.data || []);
+      setEntranceExams(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching entrance exams:', error);
     }
@@ -100,7 +100,7 @@ const Admin = () => {
   const fetchDocumentTypes = async () => {
     try {
       const res = await getDocumentTypes();
-      setDocumentTypes(res.data || []);
+      setDocumentTypes(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.error('Error fetching document types:', error);
     }

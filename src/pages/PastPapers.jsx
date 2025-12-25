@@ -13,7 +13,7 @@ const PastPapers = () => {
     const fetch = async () => {
       try {
         const res = await getNotes();
-        const notes = res.data || [];
+        const notes = Array.isArray(res.data) ? res.data : [];
         const past = notes.filter(n => {
           const typeName = n.documentTypeId?.name || '';
           return typeName.toLowerCase().includes('past') || (n.title || '').toLowerCase().includes('past');

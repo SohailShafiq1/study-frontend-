@@ -11,7 +11,7 @@ const EntranceExams = () => {
     const fetchExams = async () => {
       try {
         const response = await getEntranceExams();
-        setExams(response.data || []);
+        setExams(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching entrance exams:', error);
       }

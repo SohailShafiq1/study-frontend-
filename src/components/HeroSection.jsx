@@ -21,8 +21,10 @@ const HeroSection = () => {
     const fetchQuickLinks = async () => {
       try {
         const [classesRes, examsRes] = await Promise.all([getClasses(), getEntranceExams()]);
-        const classes = (classesRes.data || []).slice(0, 4).map(c => ({ text: c.name, link: `/classes/${c._id}` }));
-        const exams = (examsRes.data || []).slice(0, 2).map(e => ({ text: e.name, link: `/entrance-exams?examId=${e._id}` }));
+        const classesData = Array.isArray(classesRes.data) ? classesRes.data : [];
+        const examsData = Array.isArray(examsRes.data) ? examsRes.data : [];
+        const classes = classesData.slice(0, 4).map(c => ({ text: c.name, link: `/classes/${c._id}` }));
+        const exams = examsData.slice(0, 2).map(e => ({ text: e.name, link: `/entrance-exams?examId=${e._id}` }));
         const merged = [...classes, ...exams];
         if (merged.length) setQuickLinks(merged);
       } catch (err) {
