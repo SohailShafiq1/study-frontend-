@@ -302,6 +302,17 @@ const Admin = () => {
     }
   };
 
+  // Get orphaned subjects (subjects without a class)
+  const orphanedSubjects = subjects.filter(s => !s.classId);
+
+  // Group chapters by subject to identify duplicates
+  const chaptersBySubject = {};
+  chapters.forEach(ch => {
+    const subId = ch.subjectId?._id || ch.subjectId;
+    if (!chaptersBySubject[subId]) chaptersBySubject[subId] = [];
+    chaptersBySubject[subId].push(ch);
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -317,6 +328,79 @@ const Admin = () => {
             </div>
           </div>
         </div>
+
+        {/* Cleanup Section - Show orphaned and duplicate data */}
+        {(orphanedSubjects.length > 0) && (
+          <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-bold text-orange-900 mb-4 flex items-center">
+              ⚠️ Data Cleanup Needed
+            </h2>
+            
+            {/* Orphaned Subjects */}
+            {orphanedSubjects.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-bold text-orange-800 mb-3">
+                  Orphaned Subjects ({orphanedSubjects.length}) - Not assigned to any class
+                </h3>
+                <div className="space-y-2">
+                  {orphanedSubjects.map(sub => (
+                    <div key={sub._id} className="flex items-center justify-between p-3 bg-white rounded border border-orange-200">
+                      <div>
+                        <span className="font-medium text-gray-900">{sub.name}</span>
+                        <span className="text-xs text-gray-500 ml-2">(ID: {sub._id.slice(-8)})</span>
+                      </div>
+                      <button 
+                        onClick={() => handleDeleteSubject(sub._id)} 
+                        className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Duplicate Chapters */}
+            {Object.values(chaptersBySubject).some(chs => chs.length > 1) && (
+              <div>
+                <h3 className="font-bold text-orange-800 mb-3">
+                  Duplicate Chapters - Subjects with multiple chapters with similar names
+                </h3>
+                <div className="space-y-4">
+                  {Object.entries(chaptersBySubject).map(([subId, chs]) => {
+                    if (chs.length <= 1) return null;
+                    const subjectName = subjects.find(s => s._id === subId)?.name || 'Unknown';
+                    return (
+                      <div key={subId}>
+                        <p className="font-medium text-gray-700 mb-2">{subjectName}</p>
+                        <div className="space-y-2 ml-4">
+                          {chs.map(ch => (
+                            <div key={ch._id} className="flex items-center justify-between p-3 bg-white rounded border border-orange-200">
+                              <div>
+                                <span className="font-medium text-gray-900">{ch.name}</span>
+                                <span className="text-xs text-gray-500 ml-2">(ID: {ch._id.slice(-8)})</span>
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded ml-2">
+                                  {chapters.filter(c => c._id === ch._id).length === 1 ? 'Keep' : 'Review'}
+                                </span>
+                              </div>
+                              <button 
+                                onClick={() => handleDeleteChapter(ch._id)} 
+                                className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column: Structure Management */}

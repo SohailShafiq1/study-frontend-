@@ -100,20 +100,31 @@ const SubjectPage = () => {
                           const noteId = note._id || note.id;
                           const pdf = note.pdfUrl || note.path || note.fileUrl || null;
                           return (
-                            <div key={noteId} className="flex items-center justify-between bg-gray-50 p-3 rounded">
-                              <span className="font-medium">{note.title}</span>
+                            <div key={noteId} className="flex items-center justify-between bg-gray-50 p-3 rounded border border-gray-200 hover:border-primary hover:bg-blue-50 transition">
+                              <span className="font-medium text-gray-900">{note.title}</span>
                                   {pdf ? (
                                     (() => {
                                       const resolved = pdf.startsWith('http') ? pdf : `${BACKEND_ORIGIN}${pdf}`;
                                       return (
-                                        <a
-                                          href={resolved}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
-                                        >
-                                          View PDF
-                                        </a>
+                                        <div className="flex gap-2">
+                                          <a
+                                            href={resolved}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
+                                            title="Open PDF in new tab"
+                                          >
+                                            👁️ View
+                                          </a>
+                                          <a
+                                            href={resolved}
+                                            download
+                                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-sm"
+                                            title="Download PDF"
+                                          >
+                                            📥 Download
+                                          </a>
+                                        </div>
                                       );
                                     })()
                                   ) : (
@@ -128,6 +139,13 @@ const SubjectPage = () => {
                 </div>
               );
             })}
+            
+            {chapters.length === 0 && (
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-8 text-center">
+                <p className="text-yellow-800 text-lg font-semibold">📁 No chapters available for this subject yet</p>
+                <p className="text-yellow-700 text-sm mt-2">Please ask admin to add chapters for {subjectName}</p>
+              </div>
+            )}
           </div>
         </div>
 

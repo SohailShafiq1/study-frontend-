@@ -52,14 +52,25 @@ const EntranceExams = () => {
                   </div>
                   <div className="flex gap-3">
                     {pdf ? (
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-                      >
-                        Download PDF
-                      </a>
+                      <>
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                          title="Open PDF in new tab"
+                        >
+                          👁️ View PDF
+                        </a>
+                        <a
+                          href={href}
+                          download
+                          className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold"
+                          title="Download PDF"
+                        >
+                          📥 Download
+                        </a>
+                      </>
                     ) : (
                       <span className="px-6 py-2 bg-gray-200 text-gray-600 rounded-lg text-sm">No PDF</span>
                     )}
@@ -68,6 +79,13 @@ const EntranceExams = () => {
               </div>
             );
             })}
+            
+            {(!Array.isArray(exams) || exams.length === 0) && (
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-8 text-center">
+                <p className="text-yellow-800 text-lg font-semibold">📁 No entrance exams available yet</p>
+                <p className="text-yellow-700 text-sm mt-2">Please ask admin to upload entrance exam PDFs</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
