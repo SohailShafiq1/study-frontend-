@@ -81,33 +81,39 @@ const ChapterPage = () => {
   const nextChapter = parseInt(chapterNumber) < 6 ? parseInt(chapterNumber) + 1 : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-gray-600 max-w-5xl mx-auto">
-          <Link to="/" className="hover:text-primary">Home</Link>
-          <span className="mx-2">/</span>
-          <Link to={`/classes/${classId}`} className="hover:text-primary">
+        <div className="mb-6 text-sm text-gray-700 max-w-5xl mx-auto font-semibold">
+          <Link to="/" className="hover:text-purple-600">Home</Link>
+          <span className="mx-2">→</span>
+          <Link to={`/classes/${classId}`} className="hover:text-purple-600">
             {classId.toUpperCase()} Class
           </Link>
-          <span className="mx-2">/</span>
-          <Link to={`/classes/${classId}/${subjectId}`} className="hover:text-primary capitalize">
+          <span className="mx-2">→</span>
+          <Link to={`/classes/${classId}/${subjectId}`} className="hover:text-purple-600 capitalize">
             {subjectId.replace('-', ' ')}
           </Link>
-          <span className="mx-2">/</span>
-          <span className="text-gray-900 font-semibold">Chapter {chapterNumber}</span>
+          <span className="mx-2">→</span>
+          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-bold">Chapter {chapterNumber}</span>
         </div>
 
         {/* Main Content */}
         <div className="max-w-5xl mx-auto">
           {/* Chapter Title */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {chapterData.title}
-            </h1>
-            <p className="text-lg text-gray-700">
-              {chapterData.introduction}
-            </p>
+          <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl shadow-2xl p-12 mb-8 overflow-hidden">
+            <div className="absolute inset-0 bg-black opacity-10"></div>
+            <div className="relative z-10 text-center">
+              <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+                📖 Chapter Content
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                {chapterData.title}
+              </h1>
+              <p className="text-xl text-white/90 max-w-3xl mx-auto">
+                {chapterData.introduction}
+              </p>
+            </div>
           </div>
 
           {/* PDF Viewer */}
@@ -117,20 +123,20 @@ const ChapterPage = () => {
           />
 
           {/* Written Notes Content */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              📝 Complete Notes
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-8 border-2 border-white">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 flex items-center gap-3">
+              <span className="text-4xl">📝</span> Complete Notes
             </h2>
             <div 
-              className="prose max-w-none text-gray-700"
+              className="prose max-w-none text-gray-700 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: chapterData.content }}
             />
           </div>
 
           {/* MCQs Section */}
-          <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              ✍️ Practice MCQs
+          <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-xl p-8 mb-8 border-2 border-green-200">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6 flex items-center gap-3">
+              <span className="text-4xl">✍️</span> Practice MCQs
             </h2>
             {chapterMCQs.map((mcq, index) => (
               <MCQItem key={index} mcq={mcq} index={index} />

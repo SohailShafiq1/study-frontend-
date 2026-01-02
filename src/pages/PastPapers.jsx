@@ -32,17 +32,23 @@ const PastPapers = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       <div className="container mx-auto px-4">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            📄 Past Papers Collection
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Download and practice with past examination papers from previous years. 
-            All papers include solutions and marking schemes.
-          </p>
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+          <div className="absolute inset-0 bg-black opacity-10"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+              📚 Exam Archive
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+              Past Papers Collection
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Download and practice with past examination papers from previous years. 
+              All papers include solutions and marking schemes.
+            </p>
+          </div>
         </div>
 
         {/* Papers Grid */}
@@ -57,38 +63,38 @@ const PastPapers = () => {
               const pdf = note.pdfUrl || note.path || null;
               const href = pdf ? (pdf.startsWith('http') ? pdf : `${BACKEND_ORIGIN}${pdf}`) : null;
               return (
-                <div key={note._id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-200 hover:border-primary">
-                  <div className="text-4xl mb-4">📝</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{note.title}</h3>
+                <div key={note._id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-2 border-transparent hover:border-blue-400 transform hover:-translate-y-2">
+                  <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">📝</div>
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">{note.title}</h3>
                   {note.chapterId?.name && (
-                    <p className="text-gray-600 text-sm mb-4">{note.chapterId.name}</p>
+                    <p className="text-gray-600 text-sm mb-2">{note.chapterId.name}</p>
                   )}
                   {note.year && (
-                    <p className="text-xs text-blue-600 font-semibold mb-4">Year: {note.year}</p>
+                    <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">Year: {note.year}</div>
                   )}
-                  <div className="flex gap-2 mt-6">
+                  <div className="flex gap-3 mt-6">
                     {href ? (
                       <>
                         <a
                           href={href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm text-center"
+                          className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                           title="Open PDF in new tab"
                         >
-                          👁️ View
+                          <span className="text-xl">👁️</span> View PDF
                         </a>
                         <a
                           href={href}
                           download
-                          className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-sm text-center"
+                          className="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl hover:from-green-700 hover:to-emerald-800 transition-all duration-300 font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                           title="Download PDF"
                         >
-                          📥 Download
+                          <span className="text-xl">📥</span> Download
                         </a>
                       </>
                     ) : (
-                      <span className="w-full px-3 py-2 bg-gray-200 text-gray-600 rounded-lg text-sm text-center">No PDF</span>
+                      <span className="w-full px-6 py-3 bg-gray-300 text-gray-600 rounded-xl text-center font-semibold">📄 No PDF Available</span>
                     )}
                   </div>
                 </div>
@@ -98,21 +104,21 @@ const PastPapers = () => {
         </div>
 
         {/* Sample Papers Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Available Years
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 max-w-5xl mx-auto border-2 border-white">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8 text-center">
+            📅 Available Years
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
             {years.length === 0 ? (
-              <div className="col-span-6 text-center text-gray-500">No years available</div>
+              <div className="col-span-6 text-center text-gray-500 py-8">No years available</div>
             ) : (
               years.map((year) => (
                 <div
                   key={year}
-                  className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-4 text-center border-2 border-blue-200 hover:border-primary transition cursor-pointer"
+                  className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-5 text-center shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-110"
                 >
-                  <div className="text-2xl font-bold text-primary">{year}</div>
-                  <div className="text-xs text-gray-600 mt-1">Available</div>
+                  <div className="text-3xl font-bold text-white">{year}</div>
+                  <div className="text-xs text-white/90 mt-2">✓ Available</div>
                 </div>
               ))
             )}
@@ -120,21 +126,21 @@ const PastPapers = () => {
         </div>
 
         {/* Features */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="text-4xl mb-3">✅</div>
-            <h3 className="font-bold text-lg mb-2">Solved Papers</h3>
-            <p className="text-gray-600 text-sm">Complete solutions with explanations</p>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="group bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-green-200">
+            <div className="text-6xl mb-4 group-hover:scale-125 transition-transform duration-300">✅</div>
+            <h3 className="font-bold text-xl mb-3 text-green-700">Solved Papers</h3>
+            <p className="text-gray-700">Complete solutions with detailed explanations</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="text-4xl mb-3">📥</div>
-            <h3 className="font-bold text-lg mb-2">Downloadable PDFs</h3>
-            <p className="text-gray-600 text-sm">Download and study offline</p>
+          <div className="group bg-gradient-to-br from-blue-50 to-cyan-100 rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-blue-200">
+            <div className="text-6xl mb-4 group-hover:scale-125 transition-transform duration-300">📥</div>
+            <h3 className="font-bold text-xl mb-3 text-blue-700">Downloadable PDFs</h3>
+            <p className="text-gray-700">Download and study offline anytime</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="text-4xl mb-3">🎯</div>
-            <h3 className="font-bold text-lg mb-2">Board Specific</h3>
-            <p className="text-gray-600 text-sm">Papers from all major boards</p>
+          <div className="group bg-gradient-to-br from-purple-50 to-pink-100 rounded-2xl shadow-lg hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-purple-200">
+            <div className="text-6xl mb-4 group-hover:scale-125 transition-transform duration-300">🎯</div>
+            <h3 className="font-bold text-xl mb-3 text-purple-700">Board Specific</h3>
+            <p className="text-gray-700">Papers from all major boards</p>
           </div>
         </div>
       </div>

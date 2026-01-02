@@ -29,23 +29,29 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
       <div className="container mx-auto px-4">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            📞 Contact Us
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions or suggestions? We'd love to hear from you!
-          </p>
+        {/* Hero Header */}
+        <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+          <div className="absolute inset-0 bg-black opacity-10"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+              💬 Get In Touch
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+              Contact Us
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Have questions or suggestions? We'd love to hear from you!
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Send us a Message
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border-2 border-white">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+              📧 Send us a Message
             </h2>
 
             {submitted && (
@@ -127,9 +133,9 @@ const Contact = () => {
 
           {/* Contact Information */}
           <div>
-            <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Get in Touch
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 mb-6 border-2 border-white">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+                📞 Get in Touch
               </h2>
 
               <div className="space-y-6">

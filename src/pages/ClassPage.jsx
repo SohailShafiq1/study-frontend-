@@ -36,16 +36,30 @@ const ClassPage = () => {
   const currentClass = classInfo[classId] || { title: 'Class', fullName: 'Class' };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12">
       <div className="container mx-auto px-4">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            📚 {currentClass.fullName}
-          </h1>
-          <p className="text-xl text-gray-600">
-            Complete study material for all subjects
-          </p>
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          </div>
+          <div className="relative z-10 text-center">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+              📚 Class Material
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+              {currentClass.fullName}
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Complete study material, notes, and resources for all subjects
+            </p>
+            <div className="mt-8 flex justify-center gap-4 flex-wrap">
+              <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold">
+                📖 {subjects.length} Subjects
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Subjects Grid */}
@@ -65,23 +79,23 @@ const ClassPage = () => {
         </div>
 
         {/* Quick Links Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <Link to={`/past-papers/${classId}`} className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition text-center">
-            <div className="text-4xl mb-3">📝</div>
-            <h3 className="text-xl font-bold mb-2">Past Papers</h3>
-            <p className="text-gray-600 text-sm">Previous years exam papers</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <Link to={`/past-papers/${classId}`} className="group bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300">
+            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">📝</div>
+            <h3 className="text-2xl font-bold mb-3 text-white">Past Papers</h3>
+            <p className="text-white/90">Previous years exam papers with solutions</p>
           </Link>
 
-          <Link to={`/mcqs/${classId}`} className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition text-center">
-            <div className="text-4xl mb-3">✍️</div>
-            <h3 className="text-xl font-bold mb-2">MCQs Practice</h3>
-            <p className="text-gray-600 text-sm">Multiple choice questions</p>
+          <Link to={`/mcqs/${classId}`} className="group bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300">
+            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">✍️</div>
+            <h3 className="text-2xl font-bold mb-3 text-white">MCQs Practice</h3>
+            <p className="text-white/90">Multiple choice questions bank</p>
           </Link>
 
-          <Link to="/study-tips" className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition text-center">
-            <div className="text-4xl mb-3">💡</div>
-            <h3 className="text-xl font-bold mb-2">Study Tips</h3>
-            <p className="text-gray-600 text-sm">How to prepare effectively</p>
+          <Link to="/study-tips" className="group bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300">
+            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">💡</div>
+            <h3 className="text-2xl font-bold mb-3 text-white">Study Tips</h3>
+            <p className="text-white/90">How to prepare effectively for exams</p>
           </Link>
         </div>
       </div>

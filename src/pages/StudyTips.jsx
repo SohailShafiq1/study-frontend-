@@ -63,17 +63,26 @@ const StudyTips = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 py-12">
       <div className="container mx-auto px-4">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            💡 Study Tips & Strategies
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Expert advice and proven strategies to help you study effectively, 
-            manage time better, and achieve academic excellence.
-          </p>
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+          </div>
+          <div className="relative z-10 text-center">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+              🎓 Study Smarter
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+              Study Tips & Strategies
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Expert advice and proven strategies to help you study effectively, 
+              manage time better, and achieve academic excellence.
+            </p>
+          </div>
         </div>
 
         {/* Study Tips Grid */}
@@ -90,11 +99,11 @@ const StudyTips = () => {
         </div>
 
         {/* Featured Tip Section */}
-        <div className="mt-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-xl p-8 max-w-4xl mx-auto text-white">
-          <h2 className="text-3xl font-bold mb-4">
+        <div className="mt-16 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl shadow-2xl p-10 max-w-5xl mx-auto text-white">
+          <h2 className="text-4xl font-bold mb-6 flex items-center gap-3">
             🌟 Featured Tip: The 50-10 Rule
           </h2>
-          <p className="text-lg mb-4">
+          <p className="text-xl mb-4 leading-relaxed">
             Study for 50 minutes with full concentration, then take a 10-minute break. 
             This technique helps maintain focus and prevents burnout.
           </p>

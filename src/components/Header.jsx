@@ -41,30 +41,47 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/notes?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white shadow-md border-b-2 border-primary/10">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center flex-shrink-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-primary">
-              📚 Study With Maryam
-            </h1>
+          <Link to="/" className="flex items-center flex-shrink-0 group">
+            <div className="bg-gradient-to-r from-primary to-blue-600 p-2 rounded-lg mr-2 group-hover:scale-110 transition-transform">
+              <span className="text-2xl">📚</span>
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                Study With Maryam
+              </h1>
+              <p className="text-xs text-gray-500 hidden sm:block">Your Study Companion</p>
+            </div>
           </Link>
 
           {/* Search Bar - Hidden on Mobile */}
-          <div className="hidden md:flex flex-1 max-w-xl mx-8">
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl mx-8">
             <input
               type="text"
-              placeholder="Search notes, past papers, or syllabus…"
+              placeholder="🔍 Search notes, past papers, chapters..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm transition-all"
             />
-            <button className="px-6 py-2 bg-primary text-white rounded-r-lg hover:bg-blue-700 transition">
-              🔍
+            <button 
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-r from-primary to-blue-600 text-white rounded-r-lg hover:shadow-lg transition-all font-medium"
+            >
+              Search
             </button>
-          </div>
+          </form>
 
           {/* Desktop Navigation Menu */}
           <nav className="hidden lg:flex items-center space-x-6">
@@ -177,18 +194,21 @@ const Header = () => {
         </div>
 
         {/* Mobile Search Bar */}
-        <div className="md:hidden mt-4 flex">
+        <form onSubmit={handleSearch} className="md:hidden mt-4 flex">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="🔍 Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
           />
-          <button className="px-4 py-2 bg-primary text-white rounded-r-lg hover:bg-blue-700 transition">
-            🔍
+          <button 
+            type="submit"
+            className="px-4 py-2.5 bg-gradient-to-r from-primary to-blue-600 text-white rounded-r-lg hover:shadow-lg transition-all font-medium"
+          >
+            Search
           </button>
-        </div>
+        </form>
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
