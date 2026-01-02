@@ -49,35 +49,39 @@ const SubjectPage = () => {
   }, [subjectId]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 py-16">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-gray-700">
-          <Link to="/" className="hover:text-purple-600 font-semibold">Home</Link>
-          <span className="mx-2">➜</span>
-          <Link to={`/classes/${classId}`} className="hover:text-purple-600 font-semibold">
+        <div className="mb-8 text-base text-gray-700 font-semibold animate-fadeInDown">
+          <Link to="/" className="hover:text-purple-600 transition-colors duration-300">Home</Link>
+          <span className="mx-3 text-xl">➜</span>
+          <Link to={`/classes/${classId}`} className="hover:text-purple-600 transition-colors duration-300">
             {classId.toUpperCase()} Class
           </Link>
-          <span className="mx-2">➜</span>
-          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-bold">{subjectName}</span>
+          <span className="mx-3 text-xl">➜</span>
+          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-extrabold">{subjectName}</span>
         </div>
 
         {/* Hero Header */}
-        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl shadow-2xl p-16 mb-16 overflow-hidden animate-gradient animate-scaleIn">
           <div className="absolute inset-0 bg-black opacity-10"></div>
+          <div className="absolute inset-0">
+            <div className="absolute top-10 left-10 w-96 h-96 bg-white opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse-slow delay-500"></div>
+          </div>
           <div className="relative z-10 text-center">
-            <div className="text-7xl mb-4">📖</div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+            <div className="text-8xl mb-6 animate-bounce-slow">📖</div>
+            <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-2xl">
               {classId.toUpperCase()} Class {subjectName}
             </h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            <p className="text-2xl text-white/95 max-w-3xl mx-auto leading-relaxed">
               Complete chapter-wise notes, MCQs, and study material
             </p>
-            <div className="mt-6 flex justify-center gap-4 flex-wrap">
-              <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold">
+            <div className="mt-10 flex justify-center gap-6 flex-wrap">
+              <div className="glass backdrop-blur-xl px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl border border-white/30 animate-scaleIn">
                 📚 {chapters.length} Chapters
               </div>
-              <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold">
+              <div className="glass backdrop-blur-xl px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl border border-white/30 animate-scaleIn delay-100">
                 📝 {notes.length} Notes
               </div>
             </div>
@@ -85,12 +89,12 @@ const SubjectPage = () => {
         </div>
 
         {/* Chapters List */}
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-8 text-center">
-            📑 Chapter Wise Material
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-12 text-center animate-fadeInUp">
+            📚 Chapter Wise Material
           </h2>
-          <div className="space-y-6">
-                {chapters.map((chapter) => {
+          <div className="space-y-8">
+                {chapters.map((chapter, index) => {
                   const chapterId = chapter._id || chapter.id;
                   const chapterNotes = notes.filter((n) => {
                     const nCid = n.chapterId ? (n.chapterId._id || n.chapterId) : null;
@@ -99,7 +103,8 @@ const SubjectPage = () => {
                   return (
                     <div
                       key={chapterId}
-                      className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl p-8 transition-all duration-300 border-l-8 border-gradient-to-b from-purple-500 to-pink-500 transform hover:-translate-y-1"
+                      className="group glass backdrop-blur-xl bg-white/90 rounded-3xl shadow-2xl hover:shadow-glow-purple p-10 transition-all duration-500 border-l-8 border-gradient-to-b from-purple-500 to-pink-500 transform hover:-translate-y-3 hover:scale-[1.02] card-shine animate-fadeInUp"
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
@@ -161,27 +166,27 @@ const SubjectPage = () => {
         </div>
 
         {/* Additional Resources */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="group bg-gradient-to-br from-blue-50 to-cyan-100 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-blue-200">
-            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">📥</div>
-            <h3 className="font-bold text-xl mb-3 text-blue-700">Download All Notes</h3>
-            <button className="mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          <div className="group bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 rounded-3xl shadow-2xl hover:shadow-glow p-10 text-center transform hover:-translate-y-4 hover:scale-105 transition-all duration-500 border-4 border-blue-200 hover:border-blue-400 card-shine animate-scaleIn">
+            <div className="text-7xl mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 animate-float">📥</div>
+            <h3 className="font-extrabold text-2xl mb-4 text-blue-800">Download All Notes</h3>
+            <button className="mt-6 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-extrabold shadow-2xl hover:shadow-glow transform hover:scale-110 transition-all duration-300 text-lg">
               📥 Download PDF
             </button>
           </div>
 
-          <div className="group bg-gradient-to-br from-purple-50 to-pink-100 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-purple-200">
-            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">📝</div>
-            <h3 className="font-bold text-xl mb-3 text-purple-700">Past Papers</h3>
-            <Link to={`/past-papers/${classId}`} className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 rounded-3xl shadow-2xl hover:shadow-glow p-10 text-center transform hover:-translate-y-4 hover:scale-105 transition-all duration-500 border-4 border-purple-200 hover:border-purple-400 card-shine animate-scaleIn delay-100">
+            <div className="text-7xl mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 animate-float">📝</div>
+            <h3 className="font-extrabold text-2xl mb-4 text-purple-800">Past Papers</h3>
+            <Link to={`/past-papers/${classId}`} className="inline-block mt-6 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-extrabold shadow-2xl hover:shadow-glow transform hover:scale-110 transition-all duration-300 text-lg">
               📄 View Papers
             </Link>
           </div>
 
-          <div className="group bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-xl hover:shadow-2xl p-8 text-center transform hover:-translate-y-2 transition-all duration-300 border-2 border-green-200">
-            <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">🎯</div>
-            <h3 className="font-bold text-xl mb-3 text-green-700">Practice Tests</h3>
-            <Link to={`/mcqs/${classId}`} className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <div className="group bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 rounded-3xl shadow-2xl hover:shadow-glow p-10 text-center transform hover:-translate-y-4 hover:scale-105 transition-all duration-500 border-4 border-green-200 hover:border-green-400 card-shine animate-scaleIn delay-200">
+            <div className="text-7xl mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 animate-float">🎯</div>
+            <h3 className="font-extrabold text-2xl mb-4 text-green-800">Practice Tests</h3>
+            <Link to={`/mcqs/${classId}`} className="inline-block mt-6 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-extrabold shadow-2xl hover:shadow-glow transform hover:scale-110 transition-all duration-300 text-lg">
               ✍️ Start Practice
             </Link>
           </div>

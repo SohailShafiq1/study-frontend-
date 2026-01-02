@@ -1,127 +1,157 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
-import Card from '../components/Card';
 import { getClasses, getEntranceExams, getNotes } from '../api';
 
 /**
  * Home Page - Main landing page
- * Contains: Hero Section, Popular Study Sections, Classes Section
+ * Optimized with improved error handling and consolidated data fetching.
  */
 const Home = () => {
   const [classes, setClasses] = useState([]);
-  const [exams, setExams] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [hasPastPapers, setHasPastPapers] = useState(false);
   const [popularSections, setPopularSections] = useState([]);
-  const [stats, setStats] = useState({ classes: 0, notes: 0, students: 0 });
+  const [stats, setStats] = useState({ classes: 0, notes: 0, students: 1250 });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const c = await getClasses();
-        const classData = Array.isArray(c.data) ? c.data : [];
+        // Fetch all data in parallel for better performance
+        const [classesRes, examsRes, notesRes] = await Promise.allSettled([
+          getClasses(),
+          getEntranceExams(),
+          getNotes()
+        ]);
+
+        // Safely extract results
+        const classData = classesRes.status === 'fulfilled' ? (classesRes.value?.data || []) : [];
+        const examData = examsRes.status === 'fulfilled' ? (examsRes.value?.data || []) : [];
+        const notesData = notesRes.status === 'fulfilled' ? (notesRes.value?.data || []) : [];
+
         setClasses(classData);
-        setStats(prev => ({ ...prev, classes: classData.length }));
-      } catch (e) {
-        console.error('Failed to load classes:', e);
-      }
-      try {
-        const ex = await getEntranceExams();
-        setExams(Array.isArray(ex.data) ? ex.data : []);
-      } catch (e) {
-        console.error('Failed to load exams:', e);
-      }
-      try {
-        const notesRes = await getNotes();
-        const notesData = Array.isArray(notesRes.data) ? notesRes.data : [];
-        setNotes(notesData);
-        setStats(prev => ({ ...prev, notes: notesData.length, students: 1250 }));
-        const found = notesData.some(n => {
-          const name = n.documentTypeId ? (n.documentTypeId.name || '') : '';
-          return name.toLowerCase().includes('past');
+
+        // Check for existence of past papers safely
+        const hasPastPapers = notesData.some(n => 
+          n.documentTypeId?.name?.toLowerCase().includes('past')
+        );
+
+        // Update stats
+        setStats(prev => ({
+          ...prev,
+          classes: classData.length,
+          notes: notesData.length
+        }));
+
+        // Build popular sections array
+        const secs = [];
+        
+        // Add Classes
+        classData.slice(0, 4).forEach(cls => {
+          secs.push({ 
+            title: `${cls.name} Notes`, 
+            icon: '📘', 
+            description: `Complete notes for ${cls.name}`, 
+            link: `/classes/${cls._id}`, 
+            color: 'from-blue-500 to-indigo-600' 
+          });
         });
-        setHasPastPapers(Boolean(found));
-      } catch (e) {
-        console.error('Failed to load notes for past-papers check:', e);
+
+        // Add Exams
+        examData.slice(0, 2).forEach(ex => {
+          secs.push({ 
+            title: `${ex.name} Prep`, 
+            icon: '🎓', 
+            description: `Materials for ${ex.name}`, 
+            link: `/entrance-exams?examId=${ex._id}`, 
+            color: 'from-purple-500 to-pink-600' 
+          });
+        });
+
+        // Add Past Papers if they exist
+        if (hasPastPapers) {
+          secs.push({ 
+            title: 'Past Papers', 
+            icon: '📄', 
+            description: 'Solved past papers', 
+            link: '/past-papers', 
+            color: 'from-green-500 to-teal-600' 
+          });
+        }
+
+        setPopularSections(secs);
+      } catch (error) {
+        console.error("Error in home data fetching:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    fetch();
+
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    const secs = [];
-    classes.slice(0, 4).forEach(cls => secs.push({ title: `${cls.name} Notes`, icon: '📘', description: `Complete notes for ${cls.name}`, link: `/classes/${cls._id}`, color: 'from-blue-500 to-indigo-600' }));
-    exams.slice(0, 2).forEach(ex => secs.push({ title: `${ex.name} Prep`, icon: '🎓', description: `Materials for ${ex.name}`, link: `/entrance-exams?examId=${ex._id}`, color: 'from-purple-500 to-pink-600' }));
-    if (hasPastPapers) {
-      secs.push({ title: 'Past Papers', icon: '📄', description: 'Solved past papers', link: '/past-papers', color: 'from-green-500 to-teal-600' });
-    }
-    setPopularSections(secs);
-  }, [classes, exams, hasPastPapers]);
-
-  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-50">
-      {/* Hero Section */}
+    <div className="bg-gradient-to-b from-gray-50 via-white to-gray-50">
       <HeroSection />
 
       {/* Stats Section */}
-      <section className="py-12 bg-gradient-to-r from-primary to-blue-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-5xl font-bold mb-2">{stats.classes}+</div>
-              <div className="text-xl opacity-90">Classes Available</div>
+      <section className="py-16 bg-gradient-to-r from-primary via-blue-600 to-purple-600 text-white relative overflow-hidden animate-gradient">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+            <div className="transform hover:scale-110 transition-all duration-500">
+              <div className="text-6xl font-extrabold mb-3 text-yellow-300 drop-shadow-2xl">{stats.classes}+</div>
+              <div className="text-2xl font-bold opacity-95">Classes Available</div>
             </div>
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-5xl font-bold mb-2">{stats.notes}+</div>
-              <div className="text-xl opacity-90">Study Materials</div>
+            <div className="transform hover:scale-110 transition-all duration-500">
+              <div className="text-6xl font-extrabold mb-3 text-yellow-300 drop-shadow-2xl">{stats.notes}+</div>
+              <div className="text-2xl font-bold opacity-95">Study Materials</div>
             </div>
-            <div className="transform hover:scale-105 transition-transform">
-              <div className="text-5xl font-bold mb-2">{stats.students}+</div>
-              <div className="text-xl opacity-90">Happy Students</div>
+            <div className="transform hover:scale-110 transition-all duration-500">
+              <div className="text-6xl font-extrabold mb-3 text-yellow-300 drop-shadow-2xl">{stats.students}+</div>
+              <div className="text-2xl font-bold opacity-95">Happy Students</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Popular Study Sections */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
+      <section className="py-20 bg-white relative overflow-hidden">
+        <div className="absolute top-10 right-10 w-96 h-96 bg-purple-200 opacity-20 rounded-full blur-3xl"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <span className="inline-block px-6 py-3 bg-gradient-to-r from-primary/10 to-purple-500/10 text-primary rounded-full text-sm font-bold mb-6 border-2 border-primary/20">
               📚 EXPLORE MATERIALS
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
               Popular Study Resources
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Access comprehensive study material for all classes and entrance exams
-            </p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {popularSections.map((section, index) => (
               <Link
                 key={index}
                 to={section.link}
-                className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+                className="group relative bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border-2 border-gray-100 hover:border-primary overflow-hidden transform hover:-translate-y-4"
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${section.color} opacity-5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500`}></div>
-                <div className="relative">
-                  <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${section.color} opacity-10 rounded-full -mr-20 -mt-20 group-hover:scale-150 transition-transform duration-700`}></div>
+                <div className="relative z-10">
+                  <div className="text-6xl mb-6 transform group-hover:scale-125 transition-all duration-500">
                     {section.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-                    {section.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {section.description}
-                  </p>
-                  <div className="flex items-center text-primary font-semibold">
+                  <h3 className="text-2xl font-bold mb-3">{section.title}</h3>
+                  <p className="text-gray-600 mb-6">{section.description}</p>
+                  <div className="flex items-center text-primary font-bold">
                     <span>Explore Now</span>
-                    <span className="ml-2 group-hover:ml-4 transition-all">→</span>
+                    <span className="ml-2 group-hover:ml-4 transition-all text-2xl">→</span>
                   </div>
                 </div>
               </Link>
@@ -131,43 +161,26 @@ const Home = () => {
       </section>
 
       {/* Classes Section */}
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 bg-gradient-to-b from-gray-50 via-purple-50 to-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
-              🎒 CHOOSE YOUR LEVEL
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
               Select Your Class
             </h2>
-            <p className="text-lg text-gray-600">
-              Choose your class to access complete study material
-            </p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {classes.map((cls, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {classes.map((cls) => (
               <Link
                 key={cls._id}
                 to={`/classes/${cls._id}`}
-                className="group relative bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-primary transform hover:-translate-y-2"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="group bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 text-center border-2 border-transparent hover:border-primary"
               >
-                <div className="text-center">
-                  <div className="bg-gradient-to-br from-primary/10 to-blue-100 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <span className="text-4xl">🎒</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-                    {cls.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    Complete Study Material
-                  </p>
-                  <div className="inline-flex items-center text-primary font-semibold text-sm">
-                    <span>View Resources</span>
-                    <span className="ml-2 group-hover:ml-3 transition-all">→</span>
-                  </div>
+                <div className="bg-gradient-to-br from-primary/20 to-blue-100 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-6 transition-all">
+                  <span className="text-5xl">🎒</span>
                 </div>
+                <h3 className="text-2xl font-bold mb-3">{cls.name}</h3>
+                <div className="text-primary font-bold">View Resources →</div>
               </Link>
             ))}
           </div>
@@ -175,64 +188,38 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-full text-sm font-semibold mb-4">
-              ✨ WHY CHOOSE US
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Why Study With Maryam?
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-yellow-50 to-orange-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform">
-                <span className="text-5xl">✨</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-gray-900">High Quality Content</h3>
-              <p className="text-gray-600 leading-relaxed">Expert-verified notes, handwritten solutions, and comprehensive study material crafted by educators</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="text-center p-10 rounded-3xl bg-yellow-50 border-2 border-yellow-100 hover:border-yellow-400 transition-all">
+              <span className="text-6xl block mb-6">✨</span>
+              <h3 className="text-2xl font-bold mb-4">High Quality</h3>
+              <p className="text-gray-600">Expert-verified notes and handwritten solutions.</p>
             </div>
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-teal-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform">
-                <span className="text-5xl">🆓</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-gray-900">100% Free</h3>
-              <p className="text-gray-600 leading-relaxed">All resources available at absolutely no cost. Quality education should be accessible to everyone</p>
+            <div className="text-center p-10 rounded-3xl bg-green-50 border-2 border-green-100 hover:border-green-400 transition-all">
+              <span className="text-6xl block mb-6">🆓</span>
+              <h3 className="text-2xl font-bold mb-4">100% Free</h3>
+              <p className="text-gray-600">Quality education accessible to everyone at no cost.</p>
             </div>
-            <div className="group text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 hover:shadow-xl transition-all duration-300">
-              <div className="bg-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform">
-                <span className="text-5xl">📱</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-gray-900">Mobile Friendly</h3>
-              <p className="text-gray-600 leading-relaxed">Study anywhere, anytime on any device. Perfect responsive design for seamless learning</p>
+            <div className="text-center p-10 rounded-3xl bg-blue-50 border-2 border-blue-100 hover:border-blue-400 transition-all">
+              <span className="text-6xl block mb-6">📱</span>
+              <h3 className="text-2xl font-bold mb-4">Mobile Friendly</h3>
+              <p className="text-gray-600">Study anywhere, anytime on any device.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-blue-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Ready to Start Your Learning Journey?
-          </h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Join thousands of students who are achieving their academic goals with our free study materials
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/notes"
-              className="inline-block px-8 py-4 bg-white text-primary rounded-xl font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all"
-            >
-              Browse All Notes
+      <section className="py-24 bg-gradient-to-r from-primary to-purple-600 text-white text-center">
+        <div className="container mx-auto px-4">
+          <h2 className="text-5xl font-extrabold mb-8">Ready to Start Learning?</h2>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Link to="/notes" className="px-10 py-5 bg-white text-primary rounded-2xl font-bold text-xl">
+              Browse Notes
             </Link>
-            <Link
-              to="/past-papers"
-              className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl font-bold text-lg hover:bg-white hover:text-primary transition-all"
-            >
-              View Past Papers
+            <Link to="/past-papers" className="px-10 py-5 border-4 border-white text-white rounded-2xl font-bold text-xl">
+              Past Papers
             </Link>
           </div>
         </div>

@@ -20,23 +20,27 @@ const EntranceExams = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-teal-50 to-blue-50 py-16">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-r from-green-600 via-teal-600 to-blue-600 rounded-3xl shadow-2xl p-12 mb-12 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-green-600 via-teal-600 to-blue-600 rounded-3xl shadow-2xl p-16 mb-16 overflow-hidden animate-gradient animate-scaleIn">
           <div className="absolute inset-0 bg-black opacity-10"></div>
+          <div className="absolute inset-0">
+            <div className="absolute top-10 left-10 w-96 h-96 bg-white opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse-slow delay-700"></div>
+          </div>
           <div className="relative z-10 text-center">
-            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-semibold mb-4">
+            <div className="inline-block glass backdrop-blur-xl px-6 py-3 rounded-full text-white text-sm font-bold mb-6 border border-white/30 animate-fadeInDown">
               🎯 Medical & Engineering
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+            <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-2xl animate-fadeInUp">
               Entrance Exams
             </h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            <p className="text-2xl text-white/95 max-w-3xl mx-auto leading-relaxed animate-fadeInUp delay-100">
               Complete preparation material for MDCAT, NUMS, ECAT and other entrance exams
             </p>
-            <div className="mt-8 flex justify-center gap-4 flex-wrap">
-              <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold">
+            <div className="mt-10 flex justify-center gap-6 flex-wrap animate-fadeInUp delay-200">
+              <div className="glass backdrop-blur-xl px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl border border-white/30">
                 📚 {exams.length} Available Exams
               </div>
             </div>
@@ -44,8 +48,8 @@ const EntranceExams = () => {
         </div>
 
         {/* Exams List */}
-        <div className="max-w-4xl mx-auto">
-          <div className="space-y-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="space-y-8">
             {(Array.isArray(exams) ? exams : []).map((exam, idx) => {
               const id = (exam && (exam._id || exam.id)) || `exam-${idx}`;
               const pdf = exam ? (exam.pdfUrl || exam.path || null) : null;
@@ -53,38 +57,39 @@ const EntranceExams = () => {
               return (
               <div
                 key={id}
-                className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl p-8 transition-all duration-300 border-l-8 border-gradient-to-b from-green-500 to-blue-500 transform hover:-translate-y-2"
+                className="group glass backdrop-blur-xl bg-white/90 rounded-3xl shadow-2xl hover:shadow-glow-purple p-12 transition-all duration-500 border-l-8 border-gradient-to-b from-green-500 to-blue-500 transform hover:-translate-y-4 hover:scale-[1.02] card-shine animate-scaleIn"
+                style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center justify-between flex-wrap gap-6">
                   <div className="flex-1">
-                    <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🎯</div>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
+                    <div className="text-7xl mb-5 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 animate-float inline-block">🎯</div>
+                    <h3 className="text-3xl font-extrabold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-3">
                       {exam.name}
                     </h3>
                   </div>
-                  <div className="flex gap-4 mt-6">
+                  <div className="flex gap-6 mt-6">
                     {pdf ? (
                       <>
                         <a
                           href={href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-bold shadow-lg hover:shadow-2xl transform hover:scale-105 flex items-center gap-3"
+                          className="px-10 py-5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-extrabold shadow-2xl hover:shadow-glow-purple transform hover:scale-110 flex items-center gap-3 text-lg"
                           title="Open PDF in new tab"
                         >
-                          <span className="text-2xl">👁️</span> View PDF
+                          <span className="text-3xl">👁️</span> View PDF
                         </a>
                         <a
                           href={href}
                           download
-                          className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 font-bold shadow-lg hover:shadow-2xl transform hover:scale-105 flex items-center gap-3"
+                          className="px-10 py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 font-extrabold shadow-2xl hover:shadow-glow-purple transform hover:scale-110 flex items-center gap-3 text-lg"
                           title="Download PDF"
                         >
-                          <span className="text-2xl">📥</span> Download
+                          <span className="text-3xl">📥</span> Download
                         </a>
                       </>
                     ) : (
-                      <span className="px-8 py-4 bg-gray-300 text-gray-600 rounded-xl font-bold">📄 No PDF Available</span>
+                      <span className="px-10 py-5 bg-gray-300 text-gray-600 rounded-2xl font-extrabold text-lg">📄 No PDF Available</span>
                     )}
                   </div>
                 </div>
@@ -93,10 +98,10 @@ const EntranceExams = () => {
             })}
             
             {(!Array.isArray(exams) || exams.length === 0) && (
-              <div className="bg-gradient-to-br from-yellow-50 to-orange-100 border-4 border-yellow-300 rounded-2xl p-12 text-center shadow-xl">
-                <div className="text-6xl mb-4">📁</div>
-                <p className="text-yellow-800 text-2xl font-bold mb-2">📁 No entrance exams available yet</p>
-                <p className="text-yellow-700 text-lg">Please ask admin to upload entrance exam PDFs</p>
+              <div className="bg-gradient-to-br from-yellow-50 to-orange-100 border-4 border-yellow-300 rounded-3xl p-16 text-center shadow-2xl animate-fadeInUp">
+                <div className="text-8xl mb-6 animate-bounce-slow">📁</div>
+                <p className="text-yellow-800 text-3xl font-extrabold mb-4">📁 No entrance exams available yet</p>
+                <p className="text-yellow-700 text-xl font-semibold">Please ask admin to upload entrance exam PDFs</p>
               </div>
             )}
           </div>

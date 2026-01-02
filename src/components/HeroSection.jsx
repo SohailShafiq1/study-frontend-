@@ -43,51 +43,53 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-600 via-primary to-indigo-700 py-20 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-blue-600 via-primary to-indigo-700 py-24 overflow-hidden animate-gradient">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-white opacity-5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-10 left-10 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-yellow-300 opacity-10 rounded-full blur-3xl animate-pulse-slow delay-700"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-400 opacity-10 rounded-full blur-3xl animate-floatSlow"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center text-white">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-            <span className="text-yellow-300 mr-2">⭐</span>
-            <span className="font-semibold">Pakistan's #1 Free Study Platform</span>
-            <span className="text-yellow-300 ml-2">⭐</span>
+          <div className="inline-flex items-center px-6 py-3 glass backdrop-blur-xl rounded-full mb-8 shadow-xl animate-fadeInDown border border-white/30">
+            <span className="text-yellow-300 mr-2 text-xl animate-wiggle">⭐</span>
+            <span className="font-bold text-lg">Pakistan's #1 Free Study Platform</span>
+            <span className="text-yellow-300 ml-2 text-xl animate-wiggle">⭐</span>
           </div>
 
           {/* Main Title */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 drop-shadow-lg">
-            Study With <span className="text-yellow-300">Maryam</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 drop-shadow-2xl animate-fadeInUp">
+            Study With <span className="text-yellow-300 animate-gradient bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-400 bg-clip-text text-transparent">Maryam</span>
           </h1>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-6 opacity-95">
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 opacity-95 animate-fadeInUp delay-100">
             Your Complete Study Companion 📚
           </h2>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90 leading-relaxed">
+          <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed animate-fadeInUp delay-200 font-semibold">
             Free Notes • Past Papers • MCQs • Mock Tests • Entrance Exam Prep
           </p>
 
           {/* Quick Action Buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mt-10 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mt-12 mb-14">
             {quickLinks.map((item, index) => (
               <Link 
                 key={index} 
                 to={item.link}
-                className="group relative px-6 py-3 bg-white hover:bg-yellow-300 text-gray-900 rounded-xl font-bold text-base shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                className="group relative px-7 py-4 bg-white hover:bg-yellow-300 text-gray-900 rounded-2xl font-bold text-base shadow-2xl hover:shadow-glow-purple transform hover:scale-110 transition-all duration-300 hover:-translate-y-2 animate-scaleIn border-2 border-white/50 hover:border-yellow-400"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="mr-2">{item.emoji}</span>
+                <span className="mr-2 text-xl group-hover:scale-125 inline-block transition-transform">{item.emoji}</span>
                 {item.text}
               </Link>
             ))}
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-6xl mx-auto">
             {[
               { number: '1000+', label: 'Study Notes', icon: '📝' },
               { number: '500+', label: 'Past Papers', icon: '📄' },
@@ -96,7 +98,8 @@ const HeroSection = () => {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="bg-white/10 backdrop-blur-md rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
+                className="glass backdrop-blur-xl rounded-3xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-110 hover:-translate-y-3 shadow-2xl hover:shadow-glow border border-white/30 animate-scaleIn card-shine"
+                style={{ animationDelay: `${index * 100 + 400}ms` }}
               >
                 <div className="text-3xl mb-2">{stat.icon}</div>
                 <div className="text-3xl md:text-4xl font-bold mb-1">{stat.number}</div>

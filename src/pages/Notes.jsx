@@ -124,18 +124,21 @@ const Notes = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-            <span className="text-yellow-300 mr-2">📚</span>
-            <span className="font-semibold">Complete Study Materials</span>
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-20 relative overflow-hidden animate-gradient">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
+        <div className="absolute top-10 left-10 w-96 h-96 bg-white opacity-20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse-slow delay-500"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="inline-flex items-center px-6 py-3 glass backdrop-blur-xl rounded-full mb-8 shadow-xl border border-white/30 animate-scaleIn">
+            <span className="text-yellow-300 mr-2 text-xl">📚</span>
+            <span className="font-bold text-lg">Complete Study Materials</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-2xl animate-fadeInUp">
             Study Notes Library
           </h1>
-          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
+          <p className="text-2xl md:text-3xl opacity-95 max-w-4xl mx-auto leading-relaxed animate-fadeInUp delay-100">
             Access comprehensive notes for all classes and entrance exams. High-quality, exam-focused content to help you excel.
           </p>
         </div>
