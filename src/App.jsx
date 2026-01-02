@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -10,6 +11,7 @@ import PastPapers from './pages/PastPapers';
 import MCQs from './pages/MCQs';
 import StudyTips from './pages/StudyTips';
 import Contact from './pages/Contact';
+import Login from './pages/Login';
 
 // Class and Subject Pages
 import ClassPage from './pages/ClassPage';
@@ -24,42 +26,66 @@ import EntranceExams from './pages/EntranceExams';
 // Admin Page
 import Admin from './pages/Admin';
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
 /**
  * Main App Component
  * Sets up routing for the entire application
  */
 function App() {
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        
-        <main className="flex-grow">
-          <Routes>
-            {/* Main Pages */}
-            <Route path="/" element={<Home />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/past-papers" element={<PastPapers />} />
-            <Route path="/mcqs" element={<MCQs />} />
-            <Route path="/study-tips" element={<StudyTips />} />
-            <Route path="/contact" element={<Contact />} />
+    <AuthProvider>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          
+          <main className="flex-grow">
+            <Routes>
+              {/* Main Pages */}
+              <Route path="/" element={<Home />} />
+              <Route path="/notes" element={<Notes />} />
+              <Route path="/past-papers" element={<PastPapers />} />
+              <Route path="/mcqs" element={<MCQs />} />
+              <Route path="/study-tips" element={<StudyTips />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
 
-            {/* Class Pages - Dynamic routing for 9th, 10th, 11th, 12th */}
-            <Route path="/classes/:classId" element={<ClassPage />} />
-            
-            {/* Subject Pages - Dynamic routing for subjects within each class */}
-            <Route path="/classes/:classId/:subjectId" element={<SubjectPage />} />
-            
-            {/* Chapter Pages - Individual chapter notes */}
-            <Route path="/classes/:classId/:subjectId/:chapterId" element={<ChapterPage />} />
+              {/* Class Pages - Dynamic routing for 9th, 10th, 11th, 12th */}
+              <Route path="/classes/:classId" element={<ClassPage />} />
+              
+              {/* Subject Pages - Dynamic routing for subjects within each class */}
+              <Route path="/classes/:classId/:subjectId" element={<SubjectPage />} />
+              
+              {/* Chapter Pages - Individual chapter notes */}
+              <Route path="/classes/:classId/:subjectId/:chapterId" element={<ChapterPage />} />
 
-            {/* Entrance Exam Pages */}
-            <Route path="/entrance-exams" element={<EntranceExams />} />
-            <Route path="/entrance-exams/mdcat" element={<MDCATPage />} />
-            <Route path="/entrance-exams/nums" element={<NUMSPage />} />
-            
-            {/* Admin Panel */}
-            <Route path="/admin" element={<Admin />} />
+              {/* Entrance Exam Pages */}
+              <Route path="/entrance-exams" element={<EntranceExams />} />
+              <Route path="/entrance-exams/mdcat" element={<MDCATPage />} />
+              <Route path="/entrance-exams/nums" element={<NUMSPage />} />
+              
+              {/* Admin Panel - Protected Route */}
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              } />
             
             {/* Entrance Exam Subject Pages (can be expanded) */}
             <Route path="/entrance-exams/:examId/:subjectId" element={<SubjectPage />} />
@@ -86,6 +112,7 @@ function App() {
         <Footer />
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

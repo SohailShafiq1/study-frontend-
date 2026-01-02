@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getClasses, getEntranceExams } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * Header Component - Sticky Navigation Bar
@@ -13,6 +14,8 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [classes, setClasses] = useState([]);
   const [exams, setExams] = useState([]);
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +34,12 @@ const Header = () => {
     };
     fetchData();
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
@@ -139,9 +148,23 @@ const Header = () => {
               Contact
             </Link>
 
-            <Link to="/admin" className="text-gray-700 hover:text-primary font-medium transition text-sm">
-              Admin
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link to="/admin" className="text-gray-700 hover:text-primary font-medium transition text-sm">
+                  Admin
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                Admin Login
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -268,13 +291,31 @@ const Header = () => {
               Contact
             </Link>
 
-            <Link 
-              to="/admin" 
-              className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-primary transition text-sm border-t border-gray-100"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Admin
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link 
+                  to="/admin" 
+                  className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-primary transition text-sm border-t border-gray-100"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Admin
+                </Link>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 transition text-sm border-t border-gray-100 font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link 
+                to="/login" 
+                className="block px-4 py-3 bg-primary text-white hover:bg-blue-700 transition text-sm border-t border-gray-100 font-medium text-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin Login
+              </Link>
+            )}
           </nav>
         )}
       </div>
