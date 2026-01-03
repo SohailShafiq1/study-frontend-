@@ -143,7 +143,7 @@ const Contact = () => {
                   <div className="text-3xl mr-4">📱</div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
-                    <p className="text-gray-600">+92 300 1234567</p>
+                    <p className="text-gray-600">+92 3408432739</p>
                     <a 
                       href="https://wa.me/923001234567" 
                       className="text-primary hover:underline"
